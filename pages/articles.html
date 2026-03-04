@@ -42,7 +42,11 @@
                 </div>
                 <div class="right-actions">
                     <div class="dropdown-container">
-                        <span class="icon" title="Download" onclick="toggleDownloadMenu()">⭳</span>
+                        <svg class="svg-icon" title="Download" onclick="toggleDownloadMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
                         <div id="downloadMenu" class="dropdown-menu">
                             <div onclick="downloadFile('pdf')">Download as PDF</div>
                             <div onclick="downloadFile('md')">Download as Markdown (.md)</div>
@@ -280,7 +284,7 @@
             }
         });
 
-        function generateTOC() {
+        function generateTOC() {    
             tocList.innerHTML = ''; 
             const headings = contentBody.querySelectorAll('h1, h2, h3');
 
@@ -306,6 +310,32 @@
                 li.appendChild(a);
                 tocList.appendChild(li);
             });
+
+            // --- YENİ EKLENEN: Dinamik Takip Sistemi (ScrollSpy) ---
+            const tocLinks = tocList.querySelectorAll('a');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-80px 0px -70% 0px', // Başlık ekranda belirginleştiğinde tetikler
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Eski aktifleri temizle
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        // Ekranda görünen başlığın linkini aktif yap
+                        const activeId = entry.target.id;
+                        const activeLink = tocList.querySelector(`a[href="#${activeId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            headings.forEach(heading => observer.observe(heading));
         }
 
         window.onload = loadGitHubMenu;

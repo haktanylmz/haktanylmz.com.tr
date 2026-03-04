@@ -353,3 +353,42 @@ body.light-theme .icon:hover { color: #0969da; }
 .search-result-card:hover { border-color: #58a6ff; }
 body.light-theme .search-result-card { border-color: #d0d7de; }
 body.light-theme .search-result-card:hover { border-color: #0969da; }
+
+/* ------------------------------------- */
+/* ÜST BAR BOŞLUK (PADDING) DÜZELTMESİ   */
+/* ------------------------------------- */
+.top-action-bar {
+    padding: 10px 20px 15px 20px; /* Sağa ve sola 20px nefes alma boşluğu eklendi */
+}
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.svg-icon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    color: #8b949e;
+    transition: color 0.2s, transform 0.2s;
+    margin-left: 15px;
+}
+.svg-icon:hover { color: #58a6ff; }
+body.light-theme .svg-icon { color: #57606a; }
+body.light-theme .svg-icon:hover { color: #0969da; }
+
+/* ------------------------------------- */
+/* İÇİNDEKİLER (TOC) AKTİF BAŞLIK DURUMU */
+/* ------------------------------------- */
+.toc-sidebar a.active {
+    color: #58a6ff;
+    font-weight: 600;
+    border-left: 2px solid #58a6ff; /* Soluna şık bir çizgi atar */
+    padding-left: 8px; /* Yazıyı hafif sağa kaydırır */
+    margin-left: -10px; /* Çizgiyi hizalamak için */
+    transition: all 0.3s ease;
+}
+body.light-theme .toc-sidebar a.active {
+    color: #0969da;
+    border-left-color: #0969da;
+}
