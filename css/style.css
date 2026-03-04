@@ -74,8 +74,10 @@ header a:hover { opacity: 0.8; }
 .search-box input { width: 100%; background-color: transparent; border: 1px solid #30363d; border-radius: 6px; padding: 8px 10px 8px 30px; color: #c9d1d9; font-family: 'Fira Code', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s, background-color 0.2s; }
 .search-box input:focus { border-color: #58a6ff; background-color: #0d1117; }
 
-/* DÜZELTİLEN KISIM: Z-Index 850 Yapıldı ve Dikey Padding Sıfırlandı */
-.top-action-bar { position: sticky; top: 70px; background-color: #0d1117; z-index: 850; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 20px; border-bottom: 1px solid #30363d; }
+/* ------------------------------------- */
+/* DÜZELTİLEN KISIM: Z-Index 950 ve Katı Arka Plan */
+/* ------------------------------------- */
+.top-action-bar { position: sticky; top: 70px; background-color: #0d1117; z-index: 950; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; margin-bottom: 20px; border-bottom: 1px solid #30363d; }
 .top-action-bar .left-actions, .top-action-bar .right-actions { display: flex; align-items: center; gap: 18px; }
 
 .svg-icon { width: 20px; height: 20px; cursor: pointer; color: #8b949e; transition: color 0.2s, transform 0.2s; display: block; }
@@ -93,9 +95,6 @@ header a:hover { opacity: 0.8; }
 .toc-sidebar a.active { color: #58a6ff; font-weight: 600; border-left: 2px solid #58a6ff; padding-left: 8px; margin-left: -10px; transition: all 0.3s ease; }
 .toc-h2 { margin-left: 10px; }
 .toc-h3 { margin-left: 20px; font-size: 0.8rem !important; opacity: 0.8; }
-
-/* DÜZELTİLEN KISIM: ToC Menüsünün Yatay Paddingi Simetrik Yapıldı */
-.toc-sidebar { padding: 0 20px; }
 
 .dropdown-container { position: relative; display: flex; align-items: center; }
 .dropdown-menu { display: none; position: absolute; top: 35px; right: 0; background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 5px 0; min-width: 170px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
