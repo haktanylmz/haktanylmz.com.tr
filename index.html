@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haktan Yılmaz | Network Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Karanlık Tema ve Temel Sıfırlama */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #0d1117; /* GitHub Dark Mode arkaplan rengi */
+            color: #c9d1d9;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: left;
+            max-width: 600px;
+            padding: 20px;
+        }
+        
+        /* Başlıklar ve Yazılar */
+        h1 {
+            font-size: 2.5rem;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #8b949e;
+            display: inline-block;
+        }
+        
+        /* Daktilo Efekti İmleci */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background-color: #58a6ff;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 5px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Navigasyon / Menü */
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        .nav-links a {
+            color: #c9d1d9;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+        .nav-links a::before {
+            content: "> ";
+            color: #58a6ff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #58a6ff;
+            padding-left: 10px;
+        }
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        /* Sosyal İkonlar */
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .social-icons img {
+            width: 30px;
+            height: 30px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: grayscale(100%) opacity(0.7);
+        }
+        .social-icons img:hover {
+            transform: translateY(-3px);
+            filter: grayscale(0%) opacity(1);
+        }
+        
+        /* Satır içi Gmail ikonu düzeltmesi */
+        .social-icons a.gmail-link img {
+            width: 35px; /* Gmail ikonunu diğerleriyle orantılamak için */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Haktan Yılmaz</h1>
+        <div class="subtitle"><span id="typewriter"></span><span class="cursor"></span></div>
+
+        <div class="nav-links">
+            <a href="#about">About Me</a>
+            <a href="makaleler.html">Articles & Notes</a>
+            <a href="#projects">Projects</a>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://linkedin.com/in/haktanylmz" target="_blank">
+                <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="LinkedIn" />
+            </a>
+            <a href="https://github.com/haktanylmz" target="_blank">
+                <img src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/github.svg" alt="GitHub" />
+            </a>
+            <a href="mailto:haktanylmz@gmail.com" class="gmail-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Email" />
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Daktilo (Typewriter) Efekti JavaScript Kodu
+        const text = "Network Engineer & MIS Student";
+        const typewriterElement = document.getElementById("typewriter");
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                typewriterElement.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100); // Yazma hızı (milisaniye)
+            }
+        }
+
+        // Sayfa yüklendiğinde efekti başlat
+        window.onload = () => {
+            setTimeout(typeWriter, 500); // Yarım saniye bekleyip başlar
+        };
+    </script>
+</body>
+</html>
