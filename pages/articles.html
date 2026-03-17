@@ -18,6 +18,12 @@
 
     <div class="docs-container">
         <div class="sidebar" id="sidebar">
+            
+            <div class="search-box desktop-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="searchInput" placeholder="Search in contents...">
+            </div>
+
             <h3>Directory</h3>
             <div id="menu-container">
                 <p style="color: #8b949e; font-size: 0.9rem;">Fetching repositories...</p>
@@ -35,12 +41,12 @@
                             </div>
                             <div class="right-actions">
                                 
-                                <div class="dropdown-container">
+                                <div class="dropdown-container mobile-search-container">
                                     <svg class="svg-icon" title="Search" onclick="toggleSearchMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                     <div id="searchMenu" class="dropdown-menu" style="width: 260px; padding: 10px; right: 0;">
                                         <div class="search-box" style="margin-bottom: 0;">
                                             <span class="search-icon">🔍</span>
-                                            <input type="text" id="searchInput" placeholder="Search in contents..." style="width: 100%; margin: 0;">
+                                            <input type="text" class="searchInput" id="mobileSearchInput" placeholder="Search in contents..." style="width: 100%; margin: 0;">
                                         </div>
                                     </div>
                                 </div>
@@ -99,7 +105,6 @@
         const menuContainer = document.getElementById('menu-container');
         const contentBody = document.getElementById('content-body');
         const tocList = document.getElementById('toc-list');
-        const searchInput = document.getElementById('searchInput');
 
         let allArticlesData = []; 
         let currentMarkdownRaw = ""; 
@@ -112,7 +117,7 @@
             if (downloadMenu) downloadMenu.classList.remove('show'); 
             searchMenu.classList.toggle('show');
             if (searchMenu.classList.contains('show')) {
-                setTimeout(() => document.getElementById('searchInput').focus(), 100);
+                setTimeout(() => document.getElementById('mobileSearchInput').focus(), 100);
             }
         }
 
@@ -258,28 +263,16 @@
 
                 currentMarkdownRaw = await response.text(); 
                 
-                /* ================================================== */
-                /* YENİ EKLENEN KISIM: GÖRSEL PATH'LERİNİ DÜZELTME    */
-                /* ================================================== */
                 let processedMarkdown = currentMarkdownRaw;
-                
-                // Eğer özel URL (Profil/Readme) değilse, klasör bazlı resim yollarını düzeltiyoruz
                 if (!isCustomUrl) {
-                    // Bulunduğumuz markdown dosyasının klasörünü tespit edelim
                     const parts = pathOrUrl.split('/');
-                    parts.pop(); // Sonda bulunan .md dosyasının adını atalım
+                    parts.pop();
                     const basePath = parts.length > 0 ? parts.join('/') + '/' : '';
-                    
-                    // Resimlerin çekileceği asıl GitHub Raw kök dizini
                     const baseUrl = `https://raw.githubusercontent.com/${REPO_NAME}/${BRANCH}/${basePath}`;
                     
-                    // 1. Markdown Formatındaki Resimleri Düzeltme: ![alt text](resim.png) -> ![alt text](https://raw.../resim.png)
                     processedMarkdown = processedMarkdown.replace(/!\[(.*?)\]\((?!http)(.*?)\)/g, `![$1](${baseUrl}$2)`);
-                    
-                    // 2. HTML Formatındaki Resimleri Düzeltme: <img src="resim.png"> -> <img src="https://raw.../resim.png">
                     processedMarkdown = processedMarkdown.replace(/<img([^>]+)src=["'](?!http)([^"']+)["']/gi, `<img$1src="${baseUrl}$2"`);
                 }
-                /* ================================================== */
 
                 contentBody.innerHTML = marked.parse(processedMarkdown);
                 
@@ -330,49 +323,56 @@
             }
         }
 
-        searchInput.addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.file-link');
-            
-            items.forEach(item => {
-                if (item.innerText.toLowerCase().includes(term)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
+        // İki arama çubuğunu birbirine bağlıyoruz (Masaüstü ve Mobil)
+        const searchInputs = document.querySelectorAll('.searchInput');
+        searchInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                const term = e.target.value.toLowerCase();
+                
+                // Senkronizasyon (Mobilde yazılan masaüstüne, masaüstündeki mobile geçsin)
+                searchInputs.forEach(i => { if (i !== e.target) i.value = term; });
+
+                const items = document.querySelectorAll('.file-link');
+                items.forEach(item => {
+                    if (item.innerText.toLowerCase().includes(term)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if(term.length > 2) {
+                    const results = allArticlesData.filter(art => 
+                        art.content.toLowerCase().includes(term) || art.title.toLowerCase().includes(term)
+                    );
+                    
+                    if(results.length > 0) {
+                        let html = `<h1>Search Results for "${term}"</h1>`;
+                        results.forEach(res => {
+                            const index = res.content.toLowerCase().indexOf(term);
+                            const start = Math.max(0, index - 40);
+                            const end = Math.min(res.content.length, index + 60);
+                            let snippet = res.content.substring(start, end).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                            
+                            html += `
+                                <div class="search-result-card" onclick="loadMarkdownContent('${res.path}', '${res.title}', allArticlesData.findIndex(a => a.path === '${res.path}'), ${res.isCustomUrl})">
+                                    <h3 style="margin-top:0;">📄 ${res.title}</h3>
+                                    <p style="font-size:0.9rem; color:#8b949e;">...${snippet}...</p>
+                                </div>
+                            `;
+                        });
+                        contentBody.innerHTML = html;
+                        document.getElementById('article-nav').style.display = 'none';
+                        tocList.innerHTML = '<li><span style="color: #8b949e; font-size: 0.85rem;">Search active...</span></li>';
+                    } else {
+                        contentBody.innerHTML = `<h1>No results found for "${term}"</h1>`;
+                        document.getElementById('article-nav').style.display = 'none';
+                    }
+                } else if (term.length === 0) {
+                    const readme = allArticlesData[0];
+                    loadMarkdownContent(readme.path, readme.title, 0, readme.isCustomUrl);
                 }
             });
-
-            if(term.length > 2) {
-                const results = allArticlesData.filter(art => 
-                    art.content.toLowerCase().includes(term) || art.title.toLowerCase().includes(term)
-                );
-                
-                if(results.length > 0) {
-                    let html = `<h1>Search Results for "${term}"</h1>`;
-                    results.forEach(res => {
-                        const index = res.content.toLowerCase().indexOf(term);
-                        const start = Math.max(0, index - 40);
-                        const end = Math.min(res.content.length, index + 60);
-                        let snippet = res.content.substring(start, end).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                        
-                        html += `
-                            <div class="search-result-card" onclick="loadMarkdownContent('${res.path}', '${res.title}', allArticlesData.findIndex(a => a.path === '${res.path}'), ${res.isCustomUrl})">
-                                <h3 style="margin-top:0;">📄 ${res.title}</h3>
-                                <p style="font-size:0.9rem; color:#8b949e;">...${snippet}...</p>
-                            </div>
-                        `;
-                    });
-                    contentBody.innerHTML = html;
-                    document.getElementById('article-nav').style.display = 'none';
-                    tocList.innerHTML = '<li><span style="color: #8b949e; font-size: 0.85rem;">Search active...</span></li>';
-                } else {
-                    contentBody.innerHTML = `<h1>No results found for "${term}"</h1>`;
-                    document.getElementById('article-nav').style.display = 'none';
-                }
-            } else if (term.length === 0) {
-                const readme = allArticlesData[0];
-                loadMarkdownContent(readme.path, readme.title, 0, readme.isCustomUrl);
-            }
         });
 
         function generateTOC() {

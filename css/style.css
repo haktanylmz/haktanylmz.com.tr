@@ -67,6 +67,10 @@ header a:hover { opacity: 0.8; }
 .search-box input { width: 100%; background-color: transparent; border: 1px solid #30363d; border-radius: 6px; padding: 8px 10px 8px 30px; color: #c9d1d9; font-family: 'Fira Code', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s, background-color 0.2s; }
 .search-box input:focus { border-color: #58a6ff; background-color: #0d1117; }
 
+/* Masaüstünde gizli, mobilde görünür olacak menü sınıfları */
+.mobile-search-container { display: none; }
+.desktop-search { display: block; margin-bottom: 20px; }
+
 .top-action-bar { position: sticky; top: 70px; background-color: #0d1117; z-index: 950; margin-bottom: 20px; border-bottom: 1px solid #30363d; width: 100%; }
 .top-action-bar-inner { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; padding: 12px 40px; width: 100%; }
 .top-action-bar .left-actions, .top-action-bar .right-actions { display: flex; align-items: center; gap: 18px; }
@@ -137,14 +141,8 @@ body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
 /* MOBİL DÜZENLEMELER (Responsive)       */
 /* ------------------------------------- */
 @media (max-width: 768px) {
-    /* Ana header'daki yazıyı merkeze alıp gereksiz parçaları gizliyoruz */
-    header { 
-        padding: 0 20px; 
-        justify-content: center; 
-    }
-    header span { 
-        display: none; /* ./articles_and_notes.sh yazısını yerden tasarruf için gizle */
-    }
+    header { padding: 0 20px; justify-content: center; }
+    header span { display: none; }
     
     .docs-container { flex-direction: column; }
     
@@ -154,64 +152,20 @@ body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
     .article-navigation { margin: 20px 15px; padding: 0; }
     .site-footer { padding: 20px 15px; }
 
-    /* SİHİRLİ DOKUNUŞ: Kalınlığı yok etmek için action bar'ı header'ın üstüne şeffaf şekilde bindiriyoruz */
-    .top-action-bar { 
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-        width: 100%; 
-        height: 70px; 
-        background: transparent; 
-        border-bottom: none; 
-        z-index: 1010; /* Ana header'ın üstüne çıkmalı */
-        margin-bottom: 0; 
-        padding: 0;
-        pointer-events: none; /* Boşluklara tıklamayı arkadaki 'cd ~/home' yazısına geçir */
-    }
-    .top-action-bar-inner { 
-        padding: 0 15px; 
-        height: 100%;
-    }
-    .top-action-bar .left-actions, .top-action-bar .right-actions {
-        pointer-events: auto; /* İkonlar kendi üstüne tıklanabilir kalsın */
-        gap: 12px; /* Mobilde hepsi yan yana sığsın diye aralıkları biraz kıstık */
-    }
+    .top-action-bar { position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: transparent; border-bottom: none; z-index: 1010; margin-bottom: 0; padding: 0; pointer-events: none; }
+    .top-action-bar-inner { padding: 0 15px; height: 100%; }
+    .top-action-bar .left-actions, .top-action-bar .right-actions { pointer-events: auto; gap: 12px; }
+
+    /* Arama barını mobilde yer değiştiriyoruz */
+    .mobile-search-container { display: flex; align-items: center; }
+    .desktop-search { display: none; }
 
     .mobile-toc-btn { display: block; } 
 
-    .sidebar { 
-        position: fixed; 
-        top: 70px; 
-        left: -100%; 
-        width: 280px; 
-        max-width: 80vw;
-        height: calc(100vh - 70px); 
-        z-index: 960; 
-        border-right: 1px solid #30363d; 
-        border-bottom: none; 
-        box-shadow: 5px 0 15px rgba(0,0,0,0.5); 
-        transition: left 0.3s ease; 
-        background-color: #161b22; 
-        margin-left: 0; 
-        opacity: 1; 
-    }
+    .sidebar { position: fixed; top: 70px; left: -100%; width: 280px; max-width: 80vw; height: calc(100vh - 70px); z-index: 960; border-right: 1px solid #30363d; border-bottom: none; box-shadow: 5px 0 15px rgba(0,0,0,0.5); transition: left 0.3s ease; background-color: #161b22; margin-left: 0; opacity: 1; }
     .sidebar.active { left: 0; }
 
-    .toc-sidebar { 
-        position: fixed; 
-        top: 70px; 
-        right: -100%; 
-        width: 260px; 
-        max-width: 80vw;
-        height: calc(100vh - 70px); 
-        z-index: 960; 
-        border-left: 1px solid #30363d; 
-        box-shadow: -5px 0 15px rgba(0,0,0,0.5); 
-        padding: 20px; 
-        transition: right 0.3s ease; 
-        background-color: #161b22; 
-        display: block; 
-    }
+    .toc-sidebar { position: fixed; top: 70px; right: -100%; width: 260px; max-width: 80vw; height: calc(100vh - 70px); z-index: 960; border-left: 1px solid #30363d; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 20px; transition: right 0.3s ease; background-color: #161b22; display: block; }
     .toc-sidebar.active { right: 0; }
     
     body.light-theme .sidebar, body.light-theme .toc-sidebar { background-color: #f6f8fa; }
