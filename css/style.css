@@ -67,9 +67,9 @@ header a:hover { opacity: 0.8; }
 .search-box input { width: 100%; background-color: transparent; border: 1px solid #30363d; border-radius: 6px; padding: 8px 10px 8px 30px; color: #c9d1d9; font-family: 'Fira Code', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s, background-color 0.2s; }
 .search-box input:focus { border-color: #58a6ff; background-color: #0d1117; }
 
-/* Masaüstünde gizli, mobilde görünür olacak menü sınıfları (!important EKLENDİ) */
-.mobile-search-container { display: none !important; }
-.desktop-search { display: block; margin-bottom: 20px; }
+/* KÖKTEN ÇÖZÜM: ID kullanarak önceliklendirdik */
+#desktop-search-wrapper { display: block; margin-bottom: 20px; }
+#mobile-search-wrapper { display: none !important; } /* Masaüstünde KESİNLİKLE gizli */
 
 .top-action-bar { position: sticky; top: 70px; background-color: #0d1117; z-index: 950; margin-bottom: 20px; border-bottom: 1px solid #30363d; width: 100%; }
 .top-action-bar-inner { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; padding: 12px 40px; width: 100%; }
@@ -156,9 +156,9 @@ body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
     .top-action-bar-inner { padding: 0 15px; height: 100%; }
     .top-action-bar .left-actions, .top-action-bar .right-actions { pointer-events: auto; gap: 12px; }
 
-    /* Arama barını mobilde yer değiştiriyoruz (!important eklendi) */
-    .mobile-search-container { display: flex !important; align-items: center; }
-    .desktop-search { display: none !important; }
+    /* Mobilde arama barı değişimleri (!important EKLENDİ) */
+    #desktop-search-wrapper { display: none !important; } /* Mobilde KESİNLİKLE gizli */
+    #mobile-search-wrapper { display: flex !important; align-items: center; }
 
     .mobile-toc-btn { display: block; } 
 
