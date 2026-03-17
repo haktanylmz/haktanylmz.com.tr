@@ -18,10 +18,6 @@
 
     <div class="docs-container">
         <div class="sidebar" id="sidebar">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Search in contents...">
-            </div>
             <h3>Directory</h3>
             <div id="menu-container">
                 <p style="color: #8b949e; font-size: 0.9rem;">Fetching repositories...</p>
@@ -38,15 +34,27 @@
                                 <svg class="svg-icon" title="Toggle Sidebar" onclick="toggleMobileSidebar()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                             </div>
                             <div class="right-actions">
+                                
+                                <div class="dropdown-container">
+                                    <svg class="svg-icon" title="Search" onclick="toggleSearchMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    <div id="searchMenu" class="dropdown-menu" style="width: 260px; padding: 10px; right: 0;">
+                                        <div class="search-box" style="margin-bottom: 0;">
+                                            <span class="search-icon">🔍</span>
+                                            <input type="text" id="searchInput" placeholder="Search in contents..." style="width: 100%; margin: 0;">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <svg class="svg-icon mobile-toc-btn" title="Table of Contents" onclick="toggleMobileTOC()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 
                                 <div class="dropdown-container">
                                     <svg class="svg-icon" title="Download" onclick="toggleDownloadMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                     <div id="downloadMenu" class="dropdown-menu">
-                                        <div onclick="downloadFile('pdf')">Download as PDF</div>
-                                        <div onclick="downloadFile('md')">View Raw Markdown (.md)</div>
+                                        <div class="dropdown-item" onclick="downloadFile('pdf')">Download as PDF</div>
+                                        <div class="dropdown-item" onclick="downloadFile('md')">View Raw Markdown (.md)</div>
                                     </div>
                                 </div>
+
                                 <svg class="svg-icon" title="Fullscreen" onclick="toggleFullScreen()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
                                 <svg class="svg-icon" title="Toggle Theme" onclick="toggleTheme()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                             </div>
@@ -98,15 +106,32 @@
         let currentArticleTitle = "Document";
         let currentArticleIndex = -1;
 
-        /* MOBİL MENÜ TETİKLEYİCİLERİ */
+        /* AÇILIR MENÜ VE MOBİL MENÜ TETİKLEYİCİLERİ */
+        function toggleSearchMenu() {
+            const searchMenu = document.getElementById('searchMenu');
+            const downloadMenu = document.getElementById('downloadMenu');
+            if (downloadMenu) downloadMenu.classList.remove('show'); 
+            searchMenu.classList.toggle('show');
+            if (searchMenu.classList.contains('show')) {
+                setTimeout(() => document.getElementById('searchInput').focus(), 100);
+            }
+        }
+
+        function toggleDownloadMenu() {
+            const downloadMenu = document.getElementById('downloadMenu');
+            const searchMenu = document.getElementById('searchMenu');
+            if (searchMenu) searchMenu.classList.remove('show'); 
+            downloadMenu.classList.toggle('show');
+        }
+
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const toc = document.querySelector('.toc-sidebar');
             if(window.innerWidth <= 768) {
                 sidebar.classList.toggle('active');
-                toc.classList.remove('active'); // Sol açılırsa sağ kapansın
+                toc.classList.remove('active'); 
             } else {
-                sidebar.classList.toggle('hidden'); // Masaüstü davranışı
+                sidebar.classList.toggle('hidden'); 
             }
         }
 
@@ -115,32 +140,31 @@
             const toc = document.querySelector('.toc-sidebar');
             if(window.innerWidth <= 768) {
                 toc.classList.toggle('active');
-                sidebar.classList.remove('active'); // Sağ açılırsa sol kapansın
+                sidebar.classList.remove('active'); 
             }
         }
 
-        /* YENİ: BOŞLUĞA TIKLAYINCA MENÜYÜ KAPATMA MANTIĞI */
+        /* BOŞLUĞA TIKLAYINCA TÜM MENÜLERİ KAPATMA MANTIĞI */
         document.addEventListener('click', function(event) {
-            // Sadece mobil görünümde (768px ve altı) çalışsın
-            if (window.innerWidth > 768) return; 
-
-            const sidebar = document.getElementById('sidebar');
-            const toc = document.querySelector('.toc-sidebar');
-            
-            // Tıklanan yer menülerin kendi içindeyse veya açma/kapama butonlarındaysa işlem yapma
-            if (sidebar.contains(event.target) || 
-                toc.contains(event.target) || 
-                event.target.closest('[onclick="toggleMobileSidebar()"]') || 
-                event.target.closest('[onclick="toggleMobileTOC()"]')) {
-                return;
+            // Arama ve İndirme dropdown'larını kapat (hem mobil hem masaüstü)
+            if (!event.target.closest('.dropdown-container')) {
+                const dropdowns = document.querySelectorAll('.dropdown-menu');
+                dropdowns.forEach(d => d.classList.remove('show'));
             }
 
-            // Boşluğa (içerik alanına) tıklandıysa açık olan menüleri kapat
-            if (sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-            }
-            if (toc.classList.contains('active')) {
-                toc.classList.remove('active');
+            // Sağ ve sol kayan menüleri kapat (Sadece mobil)
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const toc = document.querySelector('.toc-sidebar');
+                
+                if (!sidebar.contains(event.target) && 
+                    !toc.contains(event.target) && 
+                    !event.target.closest('[onclick="toggleMobileSidebar()"]') && 
+                    !event.target.closest('[onclick="toggleMobileTOC()"]')) {
+                    
+                    if (sidebar.classList.contains('active')) sidebar.classList.remove('active');
+                    if (toc.classList.contains('active')) toc.classList.remove('active');
+                }
             }
         });
 
@@ -243,7 +267,6 @@
                 generateTOC();
                 updateNavigation();
                 
-                /* MOBİLDE İÇERİK YÜKLENİNCE AÇIK OLAN MENÜLERİ KAPAT */
                 if(window.innerWidth <= 768) {
                     document.getElementById('sidebar').classList.remove('active');
                     document.querySelector('.toc-sidebar').classList.remove('active');
@@ -355,7 +378,6 @@
                     a.className = 'toc-h3';
                 }
 
-                /* MOBİLDE TOC BAĞLANTISINA TIKLANIRSA MENÜYÜ KAPAT */
                 a.onclick = () => {
                     if(window.innerWidth <= 768) {
                         document.querySelector('.toc-sidebar').classList.remove('active');

@@ -73,7 +73,7 @@ header a:hover { opacity: 0.8; }
 
 .svg-icon { width: 20px; height: 20px; cursor: pointer; color: #8b949e; transition: color 0.2s, transform 0.2s; display: block; }
 .svg-icon:hover { color: #58a6ff; }
-.mobile-toc-btn { display: none; } /* Sadece mobilde görünecek TOC butonu */
+.mobile-toc-btn { display: none; } 
 
 .article-layout { display: flex; gap: 40px; align-items: flex-start; position: relative; }
 .markdown-wrapper { flex: 1; min-width: 0; }
@@ -91,8 +91,8 @@ header a:hover { opacity: 0.8; }
 .dropdown-container { position: relative; display: flex; align-items: center; }
 .dropdown-menu { display: none; position: absolute; top: 35px; right: 0; background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 5px 0; min-width: 170px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
 .dropdown-menu.show { display: block; }
-.dropdown-menu div { padding: 10px 15px; font-size: 0.85rem; cursor: pointer; color: #c9d1d9; transition: background 0.2s; font-family: Arial, sans-serif; }
-.dropdown-menu div:hover { background-color: #30363d; color: #58a6ff; }
+.dropdown-menu .dropdown-item { padding: 10px 15px; font-size: 0.85rem; cursor: pointer; color: #c9d1d9; transition: background 0.2s; font-family: Arial, sans-serif; }
+.dropdown-menu .dropdown-item:hover { background-color: #30363d; color: #58a6ff; }
 
 .search-result-card { margin-bottom: 15px; padding: 15px; border: 1px solid #30363d; border-radius: 6px; cursor: pointer; transition: border-color 0.2s; }
 .search-result-card:hover { border-color: #58a6ff; }
@@ -122,8 +122,8 @@ body.light-theme .markdown-body th { background-color: #f6f8fa; color: #24292f; 
 body.light-theme .markdown-body tr:nth-child(even) { background-color: #ffffff; }
 body.light-theme .markdown-body tr:nth-child(odd) { background-color: #f6f8fa; }
 body.light-theme .dropdown-menu { background-color: #ffffff; border-color: #d0d7de; }
-body.light-theme .dropdown-menu div { color: #24292f; }
-body.light-theme .dropdown-menu div:hover { background-color: #f6f8fa; }
+body.light-theme .dropdown-menu .dropdown-item { color: #24292f; }
+body.light-theme .dropdown-menu .dropdown-item:hover { background-color: #f6f8fa; }
 body.light-theme .svg-icon { color: #57606a; }
 body.light-theme .svg-icon:hover { color: #0969da; }
 body.light-theme .search-result-card { border-color: #d0d7de; }
@@ -133,28 +133,24 @@ body.light-theme .article-navigation { border-top-color: #d0d7de; }
 body.light-theme .nav-title { color: #0969da; }
 body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
 
-
 /* ------------------------------------- */
-/* MOBİL DÜZENLEMELER (Responsive - DÜZELTİLDİ) */
+/* MOBİL DÜZENLEMELER (Responsive) */
 /* ------------------------------------- */
 @media (max-width: 768px) {
     header { padding: 0 20px; }
     .docs-container { flex-direction: column; }
     
-    /* İkon çubuğunun ekranı tam kaplaması için content padding'i sıfırlandı */
     .content-area { padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
-    .markdown-body { padding: 20px; } /* Metnin kenarlara yapışmaması için padding eklendi */
+    .markdown-body { padding: 20px; } 
     .projects-container { padding: 20px; }
     .article-navigation { margin: 20px; padding: 0; }
     .site-footer { padding: 20px; }
 
-    /* Action bar tam ekran ve ikonlar köşelere dayalı */
     .top-action-bar { padding: 12px 20px; margin-bottom: 0; border-bottom: 1px solid #30363d; background-color: #0d1117; }
     .top-action-bar-inner { padding: 0; }
 
-    .mobile-toc-btn { display: block; } /* İçindekiler butonu mobilde görünür */
+    .mobile-toc-btn { display: block; } 
 
-    /* Sol Menü (Directory) Off-Canvas - Ekranın dışına saklanır, butonla girer */
     .sidebar { 
         position: fixed; 
         top: 70px; 
@@ -173,7 +169,6 @@ body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
     }
     .sidebar.active { left: 0; }
 
-    /* Sağ Menü (Contents) Off-Canvas - Ekranın dışına saklanır, butonla girer */
     .toc-sidebar { 
         position: fixed; 
         top: 70px; 
@@ -191,10 +186,8 @@ body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
     }
     .toc-sidebar.active { right: 0; }
     
-    /* Light theme desteği için sağ ve sol menü arkaplanı */
     body.light-theme .sidebar, body.light-theme .toc-sidebar { background-color: #f6f8fa; }
 }
-
 
 /* ------------------------------------- */
 /* PDF ÇIKTISI (CTRL+P) İÇİN ÖZEL TASARIM */
