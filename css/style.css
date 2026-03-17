@@ -134,20 +134,48 @@ body.light-theme .nav-title { color: #0969da; }
 body.light-theme .site-footer { border-top-color: #d0d7de; color: #57606a; }
 
 /* ------------------------------------- */
-/* MOBİL DÜZENLEMELER (Responsive) */
+/* MOBİL DÜZENLEMELER (Responsive)       */
 /* ------------------------------------- */
 @media (max-width: 768px) {
-    header { padding: 0 20px; }
+    /* Ana header'daki yazıyı merkeze alıp gereksiz parçaları gizliyoruz */
+    header { 
+        padding: 0 20px; 
+        justify-content: center; 
+    }
+    header span { 
+        display: none; /* ./articles_and_notes.sh yazısını yerden tasarruf için gizle */
+    }
+    
     .docs-container { flex-direction: column; }
     
     .content-area { padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
-    .markdown-body { padding: 20px; } 
-    .projects-container { padding: 20px; }
-    .article-navigation { margin: 20px; padding: 0; }
-    .site-footer { padding: 20px; }
+    .markdown-body { padding: 20px 15px; } 
+    .projects-container { padding: 20px 15px; }
+    .article-navigation { margin: 20px 15px; padding: 0; }
+    .site-footer { padding: 20px 15px; }
 
-    .top-action-bar { padding: 12px 20px; margin-bottom: 0; border-bottom: 1px solid #30363d; background-color: #0d1117; }
-    .top-action-bar-inner { padding: 0; }
+    /* SİHİRLİ DOKUNUŞ: Kalınlığı yok etmek için action bar'ı header'ın üstüne şeffaf şekilde bindiriyoruz */
+    .top-action-bar { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 70px; 
+        background: transparent; 
+        border-bottom: none; 
+        z-index: 1010; /* Ana header'ın üstüne çıkmalı */
+        margin-bottom: 0; 
+        padding: 0;
+        pointer-events: none; /* Boşluklara tıklamayı arkadaki 'cd ~/home' yazısına geçir */
+    }
+    .top-action-bar-inner { 
+        padding: 0 15px; 
+        height: 100%;
+    }
+    .top-action-bar .left-actions, .top-action-bar .right-actions {
+        pointer-events: auto; /* İkonlar kendi üstüne tıklanabilir kalsın */
+        gap: 12px; /* Mobilde hepsi yan yana sığsın diye aralıkları biraz kıstık */
+    }
 
     .mobile-toc-btn { display: block; } 
 
