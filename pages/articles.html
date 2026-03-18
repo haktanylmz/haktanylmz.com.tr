@@ -206,11 +206,7 @@
 
                 allArticlesData.push({ path: readmeUrl, title: readmeTitle, content: "", isCustomUrl: true });
 
-                fetch(readmeUrl)
-                    .then(res => res.text())
-                    .then(text => {
-                        allArticlesData[0].content = text;
-                    });
+                fetch(readmeUrl).then(res => res.text()).then(text => { allArticlesData[0].content = text; });
 
                 const folders = data.filter(item => item.type === 'dir');
                 for (const folder of folders) {
@@ -243,7 +239,30 @@
                     }
                 }
                 
-                loadMarkdownContent(readmeUrl, readmeTitle, 0, true);
+                /* YENİ: URL KONTROLÜ VE YÖNLENDİRME ZEKASI */
+                const urlParams = new URLSearchParams(window.location.search);
+                const fileParam = urlParams.get('file');
+
+                if (fileParam === 'first-article') {
+                    // "Articles" butonundan geldiyse Profil hariç ilk makaleyi bul
+                    const firstArticle = allArticlesData.find(a => !a.isCustomUrl);
+                    if (firstArticle) {
+                        loadMarkdownContent(firstArticle.path, firstArticle.title, allArticlesData.indexOf(firstArticle), firstArticle.isCustomUrl);
+                    } else {
+                        loadMarkdownContent(readmeUrl, readmeTitle, 0, true);
+                    }
+                } else if (fileParam) {
+                    // Sayfa yenilendiyse URL'deki dosyayı bulup direkt onu aç
+                    const targetArticle = allArticlesData.find(a => a.path === fileParam);
+                    if (targetArticle) {
+                        loadMarkdownContent(targetArticle.path, targetArticle.title, allArticlesData.indexOf(targetArticle), targetArticle.isCustomUrl);
+                    } else {
+                        loadMarkdownContent(readmeUrl, readmeTitle, 0, true);
+                    }
+                } else {
+                    // Direkt siteye girildiyse (About Me) Profil sayfasını aç
+                    loadMarkdownContent(readmeUrl, readmeTitle, 0, true);
+                }
 
             } catch (error) {
                 menuContainer.innerHTML = `<p style="color: #ff7b72;">Error: ${error.message}</p>`;
@@ -253,6 +272,11 @@
         async function loadMarkdownContent(pathOrUrl, title, index, isCustomUrl) {
             currentArticleTitle = title;
             currentArticleIndex = index;
+            
+            // YENİ: Tıklanan notu URL'ye yazar (Sayfa yenilendiğinde kaybolmasın diye)
+            const paramPath = isCustomUrl ? 'profile' : pathOrUrl;
+            window.history.replaceState(null, '', '?file=' + encodeURIComponent(paramPath));
+
             contentBody.innerHTML = '<p style="color: #8b949e;">Loading data packets...</p>';
             tocList.innerHTML = '<li><span style="color: #8b949e; font-size: 0.85rem;">Analyzing headers...</span></li>';
             
@@ -329,7 +353,6 @@
             input.addEventListener('input', function(e) {
                 const term = e.target.value.toLowerCase();
                 
-                // Senkronizasyon (Mobilde yazılan masaüstüne, masaüstündeki mobile geçsin)
                 searchInputs.forEach(i => { if (i !== e.target) i.value = term; });
 
                 const items = document.querySelectorAll('.file-link');
@@ -369,8 +392,16 @@
                         document.getElementById('article-nav').style.display = 'none';
                     }
                 } else if (term.length === 0) {
-                    const readme = allArticlesData[0];
-                    loadMarkdownContent(readme.path, readme.title, 0, readme.isCustomUrl);
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const fileParam = urlParams.get('file');
+                    
+                    if (fileParam && fileParam !== 'profile') {
+                        const target = allArticlesData.find(a => a.path === fileParam);
+                        if(target) loadMarkdownContent(target.path, target.title, allArticlesData.indexOf(target), target.isCustomUrl);
+                    } else {
+                        const readme = allArticlesData[0];
+                        loadMarkdownContent(readme.path, readme.title, 0, readme.isCustomUrl);
+                    }
                 }
             });
         });
